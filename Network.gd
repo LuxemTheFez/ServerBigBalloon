@@ -24,12 +24,13 @@ func _player_disconnected(id):
 	print("Le joueur d'id : ", id, " s'est deconnecté")
 	playerId.erase(id)
 
-remote func spawnBalloon(type,path,idBalloon):
+remote func spawnBalloon(type,path,idBalloon, offset):
 	print("on spawn des balloons let's go server :")
+	print(path)
 	var id = get_tree().get_rpc_sender_id()
 	for player in playerId:
 		if player!=id:
-			rpc_id(player, "spawnBalloon3D", type,path,idBalloon)
+			rpc_id(player, "spawnBalloon3D", type,path,idBalloon,offset)
 
 remote func receiveKillBalloon(parentPath,balloonId):
 	var id = get_tree().get_rpc_sender_id()
@@ -37,9 +38,8 @@ remote func receiveKillBalloon(parentPath,balloonId):
 		if player!=id:
 			rpc_id(player, "killBalloon", parentPath,balloonId)
 
-remote func remotePop(balloon):
-	print(balloon)
+remote func remotePop(path,idBalloon,damage):
 	var id = get_tree().get_rpc_sender_id()
 	for player in playerId:
 		if player!=id:
-			rpc_id(player, "receivePop", balloon)
+			rpc_id(player, "receivePop", path,idBalloon,damage)
